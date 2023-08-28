@@ -1,6 +1,9 @@
 import { ctx, display } from "../app.js";
 import { setupUI } from "./ui.js"
 
+export const metadata = {
+    holdingChip: false
+};
 export const chips = []
 
 /**
@@ -15,6 +18,14 @@ export const start = () => {
  */
 export const update = () => {
     ctx.clearRect(0, 0, display.w, display.h)
-    chips.forEach(c => c.update())
-    chips.forEach(c => c.render())
+    chips.forEach((c, i) => {
+        // Check if the chip is destroyed
+        if (c.isDestroyed) {
+            chips.splice(i, 1);
+            return;
+        }
+
+        c.update();
+        c.render();
+    })
 }

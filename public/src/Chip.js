@@ -1,5 +1,5 @@
 import { ctx, input } from "../app.js";
-import { chips } from "./main.js";
+import { chips, metadata } from "./main.js";
 import { hoverCheck } from "./utils.js";
 
 export default class Chip {
@@ -22,8 +22,8 @@ export default class Chip {
 
         // User Interaction info
         this.isHovered = false;
-        this.isSelected = false;
-        this.isMoving = false;
+        this.isSelected = true;
+        this.isMoving = true;
 
         // Conections
         this.isConnecting = false;
@@ -38,13 +38,22 @@ export default class Chip {
         else if (!this.isHovered && input.mouse.left) this.isSelected = false
 
         // Move schmoove
-        if ((this.isHovered && input.mouse.left) || this.isMoving) this.move(input.mouse.x - this.w / 2, input.mouse.y - this.h / 2);
-        if (!input.mouse.left) this.isMoving = false;
+        if ((this.isHovered && input.mouse.left && !metadata.holdingChip) || this.isMoving) this.move(input.mouse.x - this.w / 2, input.mouse.y - this.h / 2);
+        if (!input.mouse.left) {
+            this.isMoving = false;
+            metadata.holdingChip = false;
+        }
 
-        // Conection detection
+        this.connectionUpdate(); // Check for connecting things and update conections
+
+        // Destroy if users presses backspace
+        if (this.isSelected && input.keys["Backspace"]) this.destory();
+    }
+
+    connectionUpdate() {
         // Check if we are conecting
         if (input.mouse.left && this.isConnecting) {
-            const isDone = false;
+            let isDone = false;
             chips.forEach(chip => {
                 if (isDone) return;         // For performance
                 // Check for every input of a chip
@@ -59,7 +68,9 @@ export default class Chip {
 
                     // Check if we are clicking on the pin
                     if (hoverCheck(chip.x - 20, chip.y + pinPos - 4, 24, 8)) {
-                        console.log(i)
+                        // Create a connection
+                        this.conections.push({ from: this.conectingFrom, to: chip, toIndex: i });
+
                         isDone = true;
                         break;
                     }
@@ -88,11 +99,23 @@ export default class Chip {
                 }
             }
         }
+
+        // Update conected pins
+        this.conections.forEach((c, i) => {
+            // Check if the chip still exists
+            if (c.to.isDestroyed) {
+                this.conections = this.conections.filter(c => !c.to.isDestroyed);
+                return;
+            }
+
+            c.to.inputs[c.toIndex] = this.outputs[c.from];
+        })
     }
 
     move(x, y) {
         // Move the chip
         this.isMoving = true;
+        metadata.holdingChip = true;
         this.x = x;
         this.y = y;
     }
@@ -102,11 +125,7 @@ export default class Chip {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.w, this.h);
 
-        // Moving overlay
-        if (this.isMoving) {
-            ctx.fillStyle = "#114A";
-            ctx.fillRect(this.x, this.y, this.w, this.h);
-        }
+        this.renderOverlays(); // Render hover, move, etc. overlays
 
         // Render text
         ctx.fillStyle = "white";
@@ -114,7 +133,25 @@ export default class Chip {
         ctx.textBaseline = "middle";
         ctx.fillText(this.name, this.x + this.w / 2, this.y + this.h / 2);
 
-        // Render pins
+        this.renderIO(); // Render IO pins
+        this.renderConections(); // Render conection wires
+    }
+
+    renderOverlays() {
+        // Moving overlay
+        if (this.isMoving) {
+            ctx.fillStyle = "#114A";
+            ctx.fillRect(this.x, this.y, this.w, this.h);
+        }
+
+        // Hover overlay
+        if (this.isHovered || this.isSelected) {
+            ctx.fillStyle = "#FFF1";
+            ctx.fillRect(this.x - 4, this.y - 4, this.w + 8, this.h + 8);
+        }
+    }
+
+    renderIO() {
         const inputPinSpace = this.h / this.inputs.length;
         const outputPinSpace = this.h / this.outputs.length;
 
@@ -150,17 +187,43 @@ export default class Chip {
                 ctx.stroke();
             }
         }
+    }
 
-        // Hover overlay
-        if (this.isHovered || this.isSelected) {
-            ctx.fillStyle = "#FFF1";
-            ctx.fillRect(this.x - 4, this.y - 4, this.w + 8, this.h + 8);
-        }
+    renderConections() {
+        this.conections.forEach(c => {
+            // Calculate conection start
+            const outputPinSpace = this.h / this.outputs.length;
+            const startY = outputPinSpace * c.from + outputPinSpace / 2;
+            // Calculate conection end
+            const inputPinSpace = c.to.h / c.to.inputs.length;
+            const endY = inputPinSpace * c.toIndex + inputPinSpace / 2;
+
+            // Render the conection
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = this.outputs[c.from] ? "red" : "white" // Color the wire
+            ctx.beginPath();
+            ctx.moveTo(this.x + this.w + 20, this.y + startY);
+            ctx.lineTo(c.to.x - 20, c.to.y + endY);
+            ctx.stroke();
+        })
     }
 
     // Calculates the height of the chip depending on the amount of I/O pins
     calculateHeight() {
         if (this.inputs.length >= this.outputs.length) this.h = this.inputs.length * 16;
         else this.h = this.outputs.length * 16;
+    }
+
+    destory() {
+        // Turn on destroyed flag
+        this.isDestroyed = true;
+
+        // reset conected pins
+        this.conections.forEach(c => {
+            c.to.inputs[c.toIndex] = false;
+        })
+
+        // Clear connections array
+        this.conections.splice(0, this.conections.length);
     }
 }
