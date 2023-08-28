@@ -24,6 +24,7 @@ export default class Chip {
         this.isHovered = false;
         this.isSelected = true;
         this.isMoving = true;
+        this.justSpawned = true;
 
         // Conections
         this.isConnecting = false;
@@ -38,7 +39,7 @@ export default class Chip {
         else if (!this.isHovered && input.mouse.left) this.isSelected = false
 
         // Move schmoove
-        if ((this.isHovered && input.mouse.left && !metadata.holdingChip) || this.isMoving) this.move(input.mouse.x - this.w / 2, input.mouse.y - this.h / 2);
+        if ((this.isHovered && input.mouse.left && !metadata.holdingChip) || this.isMoving || this.justSpawned) this.move(input.mouse.x - this.w / 2, input.mouse.y - this.h / 2);
         if (!input.mouse.left) {
             this.isMoving = false;
             metadata.holdingChip = false;
@@ -48,6 +49,8 @@ export default class Chip {
 
         // Destroy if users presses backspace
         if (this.isSelected && input.keys["Backspace"]) this.destory();
+
+        if (input.mouse.left) this.justSpawned = false;
     }
 
     connectionUpdate() {
@@ -62,12 +65,8 @@ export default class Chip {
                     const outputPinSpace = chip.h / chip.inputs.length
                     const pinPos = outputPinSpace * i + outputPinSpace / 2;
 
-                    // Debug
-                    ctx.fillStyle = "#00FF00AA";
-                    ctx.fillRect(chip.x - 20, chip.y + pinPos - 4, 24, 8)
-
                     // Check if we are clicking on the pin
-                    if (hoverCheck(chip.x - 20, chip.y + pinPos - 4, 24, 8)) {
+                    if (hoverCheck(chip.x - 24, chip.y + pinPos - 8, 28, 16)) {
                         // Create a connection
                         this.conections.push({ from: this.conectingFrom, to: chip, toIndex: i });
 
@@ -88,11 +87,8 @@ export default class Chip {
                 const outputPinSpace = this.h / this.outputs.length
                 const pinPos = outputPinSpace * i + outputPinSpace / 2;
 
-                // Debug
-                ctx.fillStyle = "#00FF00AA";
-                ctx.fillRect(this.x + this.w - 2, this.y + pinPos - 4, 24, 8)
                 // Check if we clicked the pin or not
-                if (hoverCheck(this.x + this.w - 2, this.y + pinPos - 4, 24, 8)) {
+                if (hoverCheck(this.x + this.w - 4, this.y + pinPos - 8, 28, 16)) {
                     this.isConnecting = true;
                     this.conectingFrom = i;
                     break;
@@ -128,6 +124,7 @@ export default class Chip {
         this.renderOverlays(); // Render hover, move, etc. overlays
 
         // Render text
+        ctx.font = "16px Arial";
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
