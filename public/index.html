@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Canvas App</title>
+    <script type="module" src="./app.js" defer></script>
+  </head>
+  <body>
+    <main id="main">
+      <canvas id="simCanvas"></canvas>
+    </main>
+    <nav>
+      <div id="topbar">
+        <h1 id="cirName">Unnamed Circuit</h1>
+        <img
+          src="./logo.svg"
+          height="30px"
+          width="90px"
+          style="filter: invert(); object-fit: cover; padding-top: 2px"
+        />
+      </div>
+      <div id="simulationOverlay"></div>
+      <div id="bottombar">
+        <button id="menuButton">
+          MENU
+          <div>
+            <h1 id="SaveBtn">SAVE</h1>
+            <h1 id="OpenBtn">OPEN</h1>
+            <h1 id="ResetBtn">RESET</h1>
+            <h1 id="OptionsBtn">OPTIONS</h1>
+            <h1 id="HelpBtn">HELP</h1>
+          </div>
+        </button>
+        <div id="icList">
+          <button id="ic">
+            <h1>NAND</h1>
+          </button>
+        </div>
+      </div>
+      <div id="sidebar">
+        <div id="ioComponents">
+          <button id="inputBtn">I</button>
+          <button id="outputBtn">O</button>
+        </div>
+        <hr />
+      </div>
+    </nav>
+    <noscript>
+      <h1>You Need To Turn On JavaScript To Run <b>DIGLO</b></h1>
+      <a href=".">Why Am I Seeing This?</a>
+    </noscript>
+  </body>
+</html>
