@@ -14,13 +14,17 @@ const spawnIc = (IC) => {
     chips.push(newIc);
 }
 
+const reset = () => {
+    chips.forEach(c => c.isDestroyed = true);
+}
+
 export const setupUI = () => {
     // Menu
-    document.getElementById("saveBtn").onclick = () => { }
-    document.getElementById("openBtn").onclick = () => { }
-    document.getElementById("resetBtn").onclick = () => { }
-    document.getElementById("optionsBtn").onclick = () => { }
-    document.getElementById("helpBtn").onclick = () => { }
+    // document.getElementById("saveBtn").onclick = () => { }
+    // document.getElementById("openBtn").onclick = () => { }
+    document.getElementById("resetBtn").onclick = () => reset();
+    // document.getElementById("optionsBtn").onclick = () => { }
+    // document.getElementById("helpBtn").onclick = () => { }
 
     // ICs
     document.getElementById("ic").onclick = () => spawnIc(Nand); // Since the only IC is NAND we use this

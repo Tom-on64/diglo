@@ -124,7 +124,7 @@ export default class Chip {
         this.renderOverlays(); // Render hover, move, etc. overlays
 
         // Render text
-        ctx.font = "16px Arial";
+        ctx.font = "16px 'Roboto Mono', monospace";
         ctx.fillStyle = "white";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
@@ -207,8 +207,8 @@ export default class Chip {
 
     // Calculates the height of the chip depending on the amount of I/O pins
     calculateHeight() {
-        if (this.inputs.length >= this.outputs.length) this.h = this.inputs.length * 16;
-        else this.h = this.outputs.length * 16;
+        if (this.inputs.length >= this.outputs.length) this.h = this.inputs.length * 12;
+        else this.h = this.outputs.length * 12;
     }
 
     destory() {
