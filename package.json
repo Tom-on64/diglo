@@ -1,0 +1,20 @@
+{
+  "name": "diglo",
+  "version": "1.0.0",
+  "description": "A Digital Logic Simulator",
+  "main": "app.js",
+  "scripts": {
+    "deploy": "firebase deploy --only hosting:diglo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tom-on64/diglo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GNU",
+  "bugs": {
+    "url": "https://github.com/Tom-on64/diglo/issues"
+  },
+  "homepage": "https://github.com/Tom-on64/diglo#readme"
+}

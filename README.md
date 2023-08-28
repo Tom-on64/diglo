@@ -15,6 +15,8 @@ Give it a name, choose a color and press SAVE.
 You can also use CTRL (⌘) + O to open saved circuits, CTRL (⌘) + N to create a new circuit and CTRL (⌘) + H for help. \
 These shortcuts can also be found in the MENU.
 
+![Screenshot of diglo](screenshot.png)
+
 ### Why Only NAND?
 Ngl i think that most simulators have too much stuff that you don't use anyway so you don't need it. \
 I also think that you should make it all yourself so you know how everything works and than use those ICs for larger circuits.
