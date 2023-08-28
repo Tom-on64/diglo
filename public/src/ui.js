@@ -1,6 +1,8 @@
 import { input } from "../app.js";
 import Chip from "./Chip.js";
+import InputChip from "./InputChip.js";
 import Nand from "./Nand.js"
+import OutputChip from "./OutputChip.js";
 import { chips } from "./main.js";
 
 /**
@@ -8,8 +10,7 @@ import { chips } from "./main.js";
  * @param {Chip} IC Integrated Circuit
  */
 const spawnIc = (IC) => {
-    // const newIc = new IC(input.mouse.x, input.mouse.y);
-    const newIc = new IC(500, 500);
+    const newIc = new IC(input.mouse.x, input.mouse.y - 300);
     chips.push(newIc);
 }
 
@@ -24,7 +25,7 @@ export const setupUI = () => {
     // ICs
     // Since there's only one IC we get that one (NAND)
     document.getElementById("ic").onclick = () => spawnIc(Nand);
-    document.getElementById("inputBtn").onclick = () => { }
-    document.getElementById("outputBtn").onclick = () => { }
+    document.getElementById("inputBtn").onclick = () => spawnIc(InputChip);
+    document.getElementById("outputBtn").onclick = () => spawnIc(OutputChip);
 }
 
