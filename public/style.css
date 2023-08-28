@@ -1,9 +1,13 @@
-* {
+*,
+::before,
+::after {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
   color: #fff;
+  user-select: none;
 }
 
 body {
@@ -20,14 +24,14 @@ main {
   z-index: 3;
   width: 100vw;
   height: 100vh;
-  background-color: #1B1B1B;
+  background-color: #1b1b1b;
 }
 
 nav {
   display: flex;
   flex-direction: column;
   width: 100vw;
-  height: 100vh;;
+  height: 100vh;
   z-index: 5;
 }
 
@@ -134,7 +138,7 @@ nav {
 
 #sidebar {
   position: absolute;
-  top: calc((2px + 1rem)*2);
+  top: calc((2px + 1rem) * 2);
   left: 0;
   height: calc(100% - 60px);
   z-index: 4;

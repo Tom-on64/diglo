@@ -1,5 +1,5 @@
 /** @type {HTMLCanvasElement} */
-import { start, update, fixedUpdate } from "./src/main.js";
+import { start, update } from "./src/main.js";
 
 /** Canvas Element
  * @type {HTMLCanvasElement}
@@ -38,12 +38,6 @@ export const input = {
 
 // Timing
 let timestamp = 0;
-let timer = 0;
-/** 
- * The Update Rate In Miliseconds. 
- * Changes how frequently the fixedUpdate() function gets called 
- */
-export let updateRate = 50;
 
 const resizeCanvas = () => {
     canvas.width = window.innerWidth;
@@ -59,13 +53,6 @@ const frameUpdate = (time = 0) => {
     timestamp = time;
 
     update(deltatime);
-    if (timer >= updateRate) {
-        timer = 0;
-        fixedUpdate();
-        return;
-    }
-
-    timer += deltatime;
 }
 
 window.onresize = resizeCanvas;
