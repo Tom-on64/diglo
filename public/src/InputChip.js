@@ -7,7 +7,7 @@ export default class InputChip extends IOChip {
 
         this.outputs.push(false);
 
-        this.hasChanged = true
+        this.hasChanged = true;
     }
 
     update() {

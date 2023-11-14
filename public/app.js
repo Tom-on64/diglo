@@ -52,6 +52,8 @@ const frameUpdate = (time = 0) => {
     const deltatime = time - timestamp;
     timestamp = time;
 
+    ctx.fillStyle = "#1b1b1b";
+    ctx.fillRect(0, 0, display.w, display.h);
     update(deltatime);
 }
 

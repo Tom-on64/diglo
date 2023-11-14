@@ -1,8 +1,12 @@
-import { ctx, display } from "../app.js";
-import { setupUI } from "./ui.js"
+import { ctx, display, input } from "../app.js";
+import Button from "./Button.js";
+import ContextMenu from "./ContextMenu.js";
+import { renameCircuit, setupUI } from "./ui.js"
 
 export const metadata = {
-    holdingChip: false
+    holdingChip: false, 
+    ctxExists: false, 
+    ctxMenu: null, 
 };
 export const chips = []
 
@@ -16,8 +20,15 @@ export const start = () => {
 /**
  * Gets called every frame
  */
-export const update = () => {
-    ctx.clearRect(0, 0, display.w, display.h)
+export const update = (dt) => {
+    if (input.mouse.right) {
+        const buttons = [
+            new Button(0, 0, 0, 0, "Rename Circuit", () => { const newName = prompt("Rename circuit: "); if (newName) renameCircuit(newName); }),
+        ]
+        metadata.ctxMenu = new ContextMenu(buttons);
+        metadata.ctxExists = true;
+    }
+
     chips.forEach((c, i) => {
         // Check if the chip is destroyed
         if (c.isDestroyed) {
@@ -28,4 +39,8 @@ export const update = () => {
         c.update();
         c.render();
     })
+
+    if (metadata.ctxExists) { metadata.ctxMenu.render(); metadata.ctxMenu.update(); }
+
+    if (input.mouse.left && metadata.ctxExists) metadata.ctxExists = false;
 }

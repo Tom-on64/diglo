@@ -18,6 +18,10 @@ const reset = () => {
     chips.forEach(c => c.isDestroyed = true);
 }
 
+export const renameCircuit = (newName) => {
+    document.getElementById("cirName").innerText = newName;
+}
+
 export const setupUI = () => {
     // Menu
     // document.getElementById("saveBtn").onclick = () => { }

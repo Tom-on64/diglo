@@ -1,4 +1,6 @@
 import { ctx, input } from "../app.js";
+import Button from "./Button.js";
+import ContextMenu from "./ContextMenu.js";
 import { chips, metadata } from "./main.js";
 import { hoverCheck } from "./utils.js";
 
@@ -43,6 +45,20 @@ export default class Chip {
         if (!input.mouse.left) {
             this.isMoving = false;
             metadata.holdingChip = false;
+        }
+
+        // Context detex
+        if (this.isHovered && input.mouse.right) {
+            const buttons = [
+                new Button(0, 0, 0, 0, "Rename", () => {
+                    const newName = prompt("New name: ");
+                    if (newName) this.name = newName;
+                }), 
+                new Button(0, 0, 0, 0, "Destroy", () => this.destory()), 
+            ]
+
+            metadata.ctxMenu = new ContextMenu(buttons);
+            metadata.ctxExists = true;
         }
 
         this.connectionUpdate(); // Check for connecting things and update conections

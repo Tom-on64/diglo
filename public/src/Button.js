@@ -6,7 +6,7 @@ export default class Button {
      * Create a basic button
      * @param {number} x X position of button
      * @param {number} y Y position of button
-     * @param {number<} w Width of button
+     * @param {number} w Width of button
      * @param {number} h Height of button
      * @param {string} text Text content of button
      * @param {Function} onClick A callback function that gets called when the button is pressed
