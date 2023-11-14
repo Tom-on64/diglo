@@ -39,6 +39,7 @@ export default class Chip {
         // Select detect
         if (this.isHovered && input.mouse.left) this.isSelected = true
         else if (!this.isHovered && input.mouse.left) this.isSelected = false
+        if (!this.isSelected) this.duplicated = false;
 
         // Move schmoove
         if ((this.isHovered && input.mouse.left && !metadata.holdingChip) || this.isMoving || this.justSpawned) this.move(input.mouse.x - this.w / 2, input.mouse.y - this.h / 2);
@@ -50,11 +51,12 @@ export default class Chip {
         // Context detex
         if (this.isHovered && input.mouse.right) {
             const buttons = [
+                new Button(0, 0, 0, 0, "Destroy", () => this.destory()), 
+                new Button(0, 0, 0, 0, "Duplicate", () => this.clone()), 
                 new Button(0, 0, 0, 0, "Rename", () => {
                     const newName = prompt("New name: ");
                     if (newName) this.name = newName;
                 }), 
-                new Button(0, 0, 0, 0, "Destroy", () => this.destory()), 
             ]
 
             metadata.ctxMenu = new ContextMenu(buttons);
@@ -65,6 +67,7 @@ export default class Chip {
 
         // Destroy if users presses backspace
         if (this.isSelected && input.keys["Backspace"]) this.destory();
+        else if (this.isSelected && input.keys["d"] && !this.duplicated) this.clone();
 
         if (input.mouse.left) this.justSpawned = false;
     }
@@ -238,5 +241,16 @@ export default class Chip {
 
         // Clear connections array
         this.conections.splice(0, this.conections.length);
+    }
+
+    clone() {
+        this.duplicated = true;
+
+        const clone = new this.constructor(this.x, this.y);
+        clone.duplicated = true;
+        clone.name = this.name;
+        clone.color = this.color;
+
+        chips.push(clone);
     }
 }
